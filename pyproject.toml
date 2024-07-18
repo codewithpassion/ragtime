@@ -1,0 +1,40 @@
+[tool.poetry]
+name = "ragtime"
+version = "0.1.0"
+description = ""
+authors = ["Dominik Fretz <info@codewithpassion.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+
+
+python-dotenv = "^1.0.1"
+openai = "^1.35.13"
+anthropic = "^0.31.0"
+langchain = "^0.2.7"
+langchain-openai = "^0.1.15"
+langchain-groq = "^0.1.6"
+langchain-anthropic = "^0.1.19"
+langchain-community = "^0.2.7"
+langchain-postgres = "^0.0.9"
+pre-commit = "^3.7.1"
+black = "^24.4.2"
+psycopg2 = "^2.9.9"
+pgvector = "0.2.5"
+flask = "^3.0.3"
+flask-sse = "^1.0.0"
+jsonpickle = "^3.2.2"
+flask-cors = "^4.0.1"
+[tool.poetry.group.dev.dependencies]
+shellcheck-py = "^0.10.0.1"
+
+black = "^24.4.2"
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+
+# Creates python "binaries"
+[tool.poetry.scripts]
+ragtime = 'ragtime:main'

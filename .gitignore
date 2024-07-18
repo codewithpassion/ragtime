@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Poetry
+.venv/
+.poetry/
+
+# IDEs and Editors
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Logs and Temporary Files
+*.log
+*.swp
+*.swo
+*.tmp
+
+# Build and Distribution
+build/
+dist/
+*.egg-info/
+
+.env
