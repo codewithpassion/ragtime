@@ -14,14 +14,24 @@ class YoutubeTranscriptDataLoader(BaseLoader):
             with open(file_path, "r") as file:
                 data = json.load(file)
 
+            if "transcript-ts" in data:
+                transcript_tag = "transcript-ts"
+            elif "transcript" in data["metadata"]:
+                transcript_tag = "transcript"
+            else:
+                raise ValueError("No transcript found in data")
+
             metadata = data["metadata"]
-            full_transcript = " ".join([entry["text"] for entry in data["transcript"]])
+            if "transcript" in data:
+                full_transcript = data["transcript"]
+            else:
+                full_transcript = " ".join([entry["text"] for entry in data[transcript_tag]])
 
             snippets = []
             current_snippet = []
             current_duration = 0
 
-            for entry in data["transcript"]:
+            for entry in data[transcript_tag]:
                 current_snippet.append(entry["text"])
                 current_duration += entry["duration"]
 
@@ -29,7 +39,7 @@ class YoutubeTranscriptDataLoader(BaseLoader):
                     snippets.append(
                         {
                             "text": " ".join(current_snippet),
-                            "start": data["transcript"][len(snippets)]["start"],
+                            "start": data[transcript_tag][len(snippets)]["start"],
                             "duration": current_duration,
                         }
                     )
@@ -40,7 +50,7 @@ class YoutubeTranscriptDataLoader(BaseLoader):
                 snippets.append(
                     {
                         "text": " ".join(current_snippet),
-                        "start": data["transcript"][len(snippets)]["start"],
+                        "start": data[transcript_tag][len(snippets)]["start"],
                         "duration": current_duration,
                     }
                 )

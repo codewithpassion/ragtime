@@ -26,6 +26,10 @@ flask = "^3.0.3"
 flask-sse = "^1.0.0"
 jsonpickle = "^3.2.2"
 flask-cors = "^4.0.1"
+google-api-python-client = "^2.137.0"
+youtube-transcript-api = "^0.6.2"
+isodate = "^0.6.1"
+youtube-dl = {git = "https://github.com/ytdl-org/youtube-dl.git"}
 [tool.poetry.group.dev.dependencies]
 shellcheck-py = "^0.10.0.1"
 
@@ -38,3 +42,4 @@ build-backend = "poetry.core.masonry.api"
 # Creates python "binaries"
 [tool.poetry.scripts]
 ragtime = 'ragtime:main'
+yt-tools = 'tools:main_yt_tools'
