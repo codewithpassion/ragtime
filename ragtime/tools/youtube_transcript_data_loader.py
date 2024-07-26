@@ -22,7 +22,6 @@ class YoutubeTranscriptDataLoader(BaseLoader):
                 raise ValueError("No transcript found in data")
 
             metadata = data["metadata"]
-            print(type(data["transcript"]))
             if "transcript" in data and not isinstance(
                 data["transcript"], list
             ):  # @isinstance()  type(data["transcript"]) == list:
