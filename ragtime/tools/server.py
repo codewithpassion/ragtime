@@ -11,7 +11,7 @@ import uuid
 from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app, resources={r"/v1/*": {"origins": "http://localhost:5173"}})
+CORS(app, resources={r"/v1/*": {"origins": "http://localhost:*"}})
 # app.register_blueprint(sse, url_prefix="/v1/messages")
 
 
@@ -62,7 +62,9 @@ def get_data():
                         )
 
                         for chunk in run_query_rag(data):
-                            yield "event: content_block_delta\ndata: {}\n\n".format(serialize_aimessagechunk(chunk, id))
+                            yield "event: content_block_delta\ndata: {}\n\n".format(
+                                serialize_aimessagechunk(chunk, id)
+                            )
                         yield "event: message_delta\ndata: {}\n\n".format(
                             jsonpickle.encode(
                                 {
@@ -76,7 +78,9 @@ def get_data():
                             )
                         )
                         yield "event: content_block_stop\n data: {}\n\n".format(
-                            jsonpickle.encode({"type": "content_block_stop", "index": 0})
+                            jsonpickle.encode(
+                                {"type": "content_block_stop", "index": 0}
+                            )
                         )
                         yield 'event: message_stop\ndata: {"type":"message_stop"}\n\n'
 

@@ -2,8 +2,9 @@ import os
 from ..tools.database import query
 from langchain.prompts import ChatPromptTemplate
 
-# from langchain_openai import ChatOpenAI
+from langchain_openai import ChatOpenAI
 from langchain_anthropic import ChatAnthropic
+from langchain_ollama import ChatOllama
 import asyncio
 import math
 
@@ -60,6 +61,40 @@ def create_message_history(messages):
     return "\n".join([f"{m['role']}: {m['content']}" for m in messages["messages"]])
 
 
+def check_api_key(prefix: str):
+    if not os.environ.get(f"{prefix}_API_KEY"):
+        raise ValueError(
+            f"No API key specified in the environment variable {prefix}_API_KEY"
+        )
+
+
+def get_llm():
+    if os.environ.get("CHAT_PROVIDER") == "openai":
+        check_api_key("OPENAI")
+        return ChatOpenAI(
+            model=os.environ.get("CHAT_MODEL") or "gpt-4o-mini",
+            api_key=os.environ.get("OPENAI_API_KEY"),
+            base_url=os.environ.get("BASE_URL") or None,
+        )
+    elif os.environ.get("CHAT_PROVIDER") == "anthropic":
+        check_api_key("ANTHROPIC")
+        return ChatAnthropic(
+            model=os.environ.get("CHAT_MODEL") or "claude-3-5-sonnet-20240620",
+            api_key=os.environ.get("ANTHROPIC_API_KEY"),
+            base_url=os.environ.get("BASE_URL") or None,
+        )
+    elif os.environ.get("CHAT_PROVIDER") == "ollama":
+        return ChatOllama(
+            model=os.environ.get("CHAT_MODEL") or "llama3.1",
+            base_url="http://dell.home.arpa:11434",
+        )
+    else:
+        raise ValueError(
+            "No chat provider specified in the environment variable: CHAT_PROVIDER"
+        )
+    pass
+
+
 async def query_rag(messages):
     query_str = get_last_user_message(messages)
 
@@ -71,15 +106,18 @@ async def query_rag(messages):
 
     message_history = create_message_history(messages)
 
-    prompt = prompt_template.format(context=context_text, question=query_str, message_history=message_history)
+    prompt = prompt_template.format(
+        context=context_text, question=query_str, message_history=message_history
+    )
 
     messages["messages"][-1]["content"] = prompt
 
-    model = ChatAnthropic(model=DEFAULT_MODEL, api_key=os.environ["ANTHROPIC_API_KEY"])
+    model = get_llm()
+
     # only get the last user message
     query_messages = [messages["messages"][-1]]
 
-    print("Query messages", query_messages)
+    # print("Query messages", query_messages)
 
     for chunk in model.stream(query_messages):
         yield chunk
@@ -96,7 +134,9 @@ async def query_rag(messages):
         snippets = doc.metadata.get("snippets", None)
         if snippets:
             start_time = snippets[0]["start"]
-            source_timestamped = f"https://www.youtube.com/watch?v={id}&t={math.floor(start_time)}"
+            source_timestamped = (
+                f"https://www.youtube.com/watch?v={id}&t={math.floor(start_time)}"
+            )
         sources.append(
             {
                 "source": source,

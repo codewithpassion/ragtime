@@ -25,7 +25,13 @@ bun install
 ```
 cp .env.example .env
 <Add your API keys to .env>
+```
 
+In the .env file, you can also configure the providers for the embeddings as well as for the chat model used.
+There is a ready made `.env.example.ollama` - you still need the API keys to youtube though.
+
+
+```
 docker compose up
 poetry run ragtime --serve &
 cd frontend
@@ -45,7 +51,7 @@ poetry run yt-tools https://www.youtube.com/playlist?list=PLuu6fDad2eJyj3ZHfm9Tl
 ```
 
 This will create a directory based on the channel name, eg `Tim Ferriss` and save all video's transcripts
-and metadata as JSON files in this folder. 
+and metadata as JSON files in this folder.
 
 Then you can load the data with:
 (Make sure you ran `docker compose up`)

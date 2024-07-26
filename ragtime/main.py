@@ -16,7 +16,9 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--server", action="store_true", help="Run the server.")
     parser.add_argument("--reset", action="store_true", help="Reset the database.")
-    parser.add_argument("--load", type=str, help="Load data into the database from a directory.")
+    parser.add_argument(
+        "--load", type=str, help="Load data into the database from a directory."
+    )
 
     args = parser.parse_args()
 
@@ -41,11 +43,22 @@ def main():
         print("❔ Please provide your query:")
         query_text = input()
         messages = {"messages": [{"content": query_text, "role": "user"}]}
+        print(
+            "---------------------------------------------",
+            end="\n\n",
+            flush=True,
+        )
+
         for chunk in run_query_rag(messages):
             # check if chunk has a property content:
             if hasattr(chunk, "content"):
                 print(chunk.content, end="", flush=True)
             else:
+                print(
+                    "\n\n---------------------------------------------",
+                    end=" ",
+                    flush=True,
+                )
                 print("\n\n🔗 Source:", end=" ", flush=True)
                 print(chunk)
 

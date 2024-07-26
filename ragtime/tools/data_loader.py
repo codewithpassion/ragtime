@@ -1,5 +1,4 @@
 from ..tools.youtube_transcript_data_loader import YoutubeTranscriptDataLoader
-from langchain_openai import OpenAIEmbeddings
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.schema.document import Document
 
@@ -32,7 +31,9 @@ def split_documents(documents: list[Document]):
 
     matched_chunks = []
     for document in documents:
-        doc_chunks = list(filter(lambda x: x.metadata["id"] == document.metadata["id"], chunks))
+        doc_chunks = list(
+            filter(lambda x: x.metadata["id"] == document.metadata["id"], chunks)
+        )
         matched_chunks.extend(match_chunks_with_snippets(doc_chunks, document))
 
     return matched_chunks

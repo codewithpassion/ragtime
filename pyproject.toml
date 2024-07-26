@@ -30,6 +30,7 @@ google-api-python-client = "^2.137.0"
 youtube-transcript-api = "^0.6.2"
 isodate = "^0.6.1"
 youtube-dl = {git = "https://github.com/ytdl-org/youtube-dl.git"}
+langchain-ollama = "^0.1.0"
 [tool.poetry.group.dev.dependencies]
 shellcheck-py = "^0.10.0.1"
 

@@ -6,12 +6,8 @@ services:
       - "5432:5432"
     volumes:
       - ./pgdata:/var/lib/postgresql/data
+    user: ${UID:-1000}:${GID:-1000}
     environment:
       POSTGRES_DB: vectordb
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
-
-  redis:
-    image: redis:6.0
-    ports:
-      - "6379:6379"

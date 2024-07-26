@@ -3,15 +3,30 @@ import psycopg2
 from pgvector.psycopg2 import register_vector
 from dotenv import load_dotenv
 from langchain_postgres.vectorstores import PGVector
+
 from langchain_openai.embeddings import OpenAIEmbeddings
+
+from langchain_community.embeddings import OllamaEmbeddings
+
+
+def get_embeddings():
+    if os.environ.get("EMBEDDINGS") == "openai":
+        return OpenAIEmbeddings(
+            model="gpt-4o-mini", base_url=os.environ.get("BASE_URL") or None
+        )
+    else:
+        return OllamaEmbeddings(model="llama3.1", base_url=os.environ.get("BASE_URL"))
+
 
 load_dotenv(verbose=True)
 
 connection_string = os.environ["PG_CONNECTION_STRING"]
-print(f"Connection String: {connection_string} XX")
+print(f"Connection String: {connection_string}")
 
 collection_name = "ragtime"
-embeddings = OpenAIEmbeddings()
+embeddings = (
+    get_embeddings()
+)  # OllamaEmbeddings(model="llama3.1", base_url="http://dell.home.arpa:11434")
 
 vectorstore = PGVector(
     embeddings=embeddings,

@@ -16,16 +16,21 @@ class YoutubeTranscriptDataLoader(BaseLoader):
 
             if "transcript-ts" in data:
                 transcript_tag = "transcript-ts"
-            elif "transcript" in data["metadata"]:
+            elif "transcript" in data:
                 transcript_tag = "transcript"
             else:
                 raise ValueError("No transcript found in data")
 
             metadata = data["metadata"]
-            if "transcript" in data:
+            print(type(data["transcript"]))
+            if "transcript" in data and not isinstance(
+                data["transcript"], list
+            ):  # @isinstance()  type(data["transcript"]) == list:
                 full_transcript = data["transcript"]
             else:
-                full_transcript = " ".join([entry["text"] for entry in data[transcript_tag]])
+                full_transcript = " ".join(
+                    [entry["text"] for entry in data[transcript_tag]]
+                )
 
             snippets = []
             current_snippet = []
