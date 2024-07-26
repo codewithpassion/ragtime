@@ -12,10 +12,12 @@ from langchain_community.embeddings import OllamaEmbeddings
 def get_embeddings():
     if os.environ.get("EMBEDDINGS") == "openai":
         return OpenAIEmbeddings(
-            model="gpt-4o-mini", base_url=os.environ.get("BASE_URL") or None
+            model="gpt-4o-mini", base_url=os.environ.get("EMBEDDINGS_BASE_URL") or None
         )
     else:
-        return OllamaEmbeddings(model="llama3.1", base_url=os.environ.get("BASE_URL"))
+        return OllamaEmbeddings(
+            model="llama3.1", base_url=os.environ.get("EMBEDDINGS_BASE_URL")
+        )
 
 
 load_dotenv(verbose=True)
